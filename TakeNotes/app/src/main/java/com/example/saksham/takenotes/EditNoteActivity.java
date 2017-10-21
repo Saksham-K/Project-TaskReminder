@@ -7,6 +7,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Editable;
 import android.util.Log;
+import android.view.MenuItem;
 import android.widget.EditText;
 
 import java.util.HashSet;
@@ -19,6 +20,21 @@ public class EditNoteActivity extends AppCompatActivity {
     int position;
 
 
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.addnote:
+
+                Intent gotoSetRemainder = new Intent(getApplicationContext(), SetRemainder.class);
+                startActivity(gotoSetRemainder);
+
+                return true;
+            default:
+                return false;
+        }
+
+    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -41,8 +57,8 @@ public class EditNoteActivity extends AppCompatActivity {
 
     }
 
-    @Override
-    public void onBackPressed() {
+  /*  @Override
+    public void onBackPressed(){
         super.onBackPressed();
         noteData = editnote.getText().toString();
 
@@ -68,7 +84,28 @@ public class EditNoteActivity extends AppCompatActivity {
             saveNoteperm();
         }
 
+    }*/
+    @Override
+    public void onStop() {
+        super.onStop();
+        noteData = editnote.getText().toString();
+
+        if(position!=-1 ) {
+
+            MainActivity.arrayList.set(position, noteData);
+            MainActivity.arrayAdapter.notifyDataSetChanged();
+            saveNoteperm();
+
+        }
+
+        else if (position==-1)
+        {
+            MainActivity.arrayList.add(noteData);
+            MainActivity.arrayAdapter.notifyDataSetChanged();
+            saveNoteperm();
+        }
     }
+
 
     public void  saveNoteperm(){
         SharedPreferences sharedpref = this.getSharedPreferences("com.example.saksham.takenotes", Context.MODE_PRIVATE);
